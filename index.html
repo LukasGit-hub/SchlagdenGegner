@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="UTF-8"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Schlag den Gegner – Studio-System</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#1e3a8a,#090d16) fixed;color:#fff;margin:0;padding:15px 15px 150px;text-align:center;min-height:100vh}
+h1{text-transform:uppercase;letter-spacing:3px;color:var(--acc,#f59e0b);margin:0 0 10px}
+.hidden{display:none!important}
+button,input,select,textarea{font:inherit}
+.b{padding:10px 16px;margin:4px;border:0;border-radius:8px;font-weight:bold;color:#fff;cursor:pointer;background:#2563eb}
+.g{background:#16a34a}.r{background:#dc2626}.bl{background:#2563eb}.x{background:#475569}.a{background:var(--acc,#f59e0b);color:#111}
+.big{padding:20px 40px;font-size:1.2rem}
+.panel{background:rgba(255,255,255,.08);padding:15px;border-radius:12px;border:1px solid #fff3;margin:0 auto 14px;max-width:1000px;text-align:left}
+.panel h3{margin:0 0 8px;color:var(--acc,#f59e0b)}
+input,select,textarea{padding:7px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;margin:2px}
+textarea{width:100%;min-height:90px;font-family:monospace}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.card{background:#0f172ad9;padding:10px;border-radius:8px;margin-bottom:8px;border:1px solid #334155}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px;margin-top:6px}
+.slot{border:1px dashed #475569;padding:6px;border-radius:6px}.slot input{width:100%}
+#buzz{width:250px;height:250px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ef4444,#991b1b);border:8px solid #fca5a5;color:#fff;font-size:2rem;font-weight:bold}
+#buzz.locked{background:#475569;border-color:#94a3b8}#buzz.win{background:#16a34a;border-color:#86efac}
+#stage{max-width:1100px;margin:0 auto;background:#0f172ad9;border:2px solid #3b82f6;border-radius:14px;padding:22px}
+.badge{display:inline-block;background:var(--acc,#f59e0b);color:#111;font-weight:bold;padding:4px 14px;border-radius:20px}
+.title{font-size:clamp(1.8rem,4vw,3.4rem);font-weight:bold;margin:10px 0}
+.q{font-size:clamp(1.4rem,3vw,2.6rem);margin:10px 0}.ans{color:#86efac;font-size:clamp(1.2rem,2.5vw,2rem)}
+#stage img{max-width:100%;max-height:45vh;border-radius:10px;border:2px solid #475569}
+.ban{font-size:1.5rem;font-weight:bold;padding:12px;border-radius:10px;margin:10px 0}
+.tm{font:bold 3.2rem monospace;color:var(--acc,#f59e0b)}
+#bar{position:fixed;bottom:0;left:0;right:0;background:#090d16f7;border-top:3px solid var(--acc,#f59e0b);padding:8px 16px;display:flex;justify-content:space-between;gap:10px;z-index:100}
+.team{display:flex;align-items:center;gap:12px;padding:6px 14px;border-radius:12px;background:#fff1;border:2px solid #3b82f6}
+.team.t2{border-color:#ef4444;flex-direction:row-reverse}.team.win{box-shadow:0 0 20px var(--acc,#f59e0b)}
+.pts{font-size:2.4rem;font-weight:bold;color:var(--acc,#f59e0b)}
+.dots{border-collapse:collapse}.dots td{width:22px;height:22px;border:1px solid #475569}
+.dot{display:inline-block;width:14px;height:14px;border-radius:50%}
+.ov{position:fixed;z-index:50;max-width:45vw;font-weight:bold;text-shadow:0 2px 8px #000;padding:6px 14px;pointer-events:none}
+.p-oben{top:8px;left:50%;transform:translateX(-50%)}.p-oben-links{top:8px;left:8px}.p-oben-rechts{top:8px;right:8px}
+.p-mitte{top:50%;left:50%;transform:translate(-50%,-50%)}
+.p-unten{bottom:120px;left:50%;transform:translateX(-50%)}.p-unten-links{bottom:120px;left:8px}.p-unten-rechts{bottom:120px;right:8px}
+.bigs{display:flex;gap:20px;margin:20px 0}.bt{flex:1;border-radius:16px;padding:20px;border:4px solid}
+.b1{border-color:#3b82f6;background:#2563eb44}.b2{border-color:#ef4444;background:#dc262644}.bt.win{box-shadow:0 0 30px var(--acc)}
+.bn{font-size:clamp(1.5rem,3vw,3rem);font-weight:bold}.bp{font-size:clamp(4rem,14vw,11rem);font-weight:bold;color:var(--acc);line-height:1.1}
+.strip{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:12px 0}
+.sn{min-width:38px;padding:6px;border-radius:8px;background:#fff2;font-weight:bold;border:2px solid #fff6}
+.sn.done{opacity:.25;text-decoration:line-through}.sn.cur{border-color:var(--acc);background:var(--acc);color:#111}
+summary{cursor:pointer;font-weight:bold;font-size:1.05rem;color:var(--acc,#f59e0b)}details.card summary{color:#fff}.hint{font-size:.85rem;color:#cbd5e1;margin:4px 0}.b small{font-weight:normal;opacity:.85}
+</style></head><body>
+<h1 id="h1">Schlag den Gegner</h1>
+
+<div id="role" style="margin-top:40px"><p style="font-size:1.1rem">🔑 Show-Code (gleicher Code für alle Geräte)</p>
+<input id="code" placeholder="z. B. K7M2QX9P" maxlength="20" autocomplete="off" style="font-size:1.4rem;text-align:center;text-transform:uppercase;width:260px"><button class="b x" onclick="newCode()">🎲 Neu erzeugen</button>
+<p style="font-size:1.2rem;margin-top:25px">Wer bist du?</p>
+<button class="b big" onclick="pick('player')">📱 Kandidat<br><small>Buzzer auf dem Handy</small></button>
+<button class="b big" onclick="pick('host')">🎛️ Moderator<br><small>Editor &amp; Steuerung</small></button>
+<button class="b big g" onclick="pick('tv')">📺 TV-Ansicht<br><small>Großer Bildschirm</small></button></div>
+
+<div id="player" class="hidden">
+<div id="pjoin"><input id="pname" placeholder="Dein Name..." maxlength="15" style="font-size:1.4rem;text-align:center"><br><br><button class="b big g" onclick="join()">Los geht's</button></div>
+<div id="pgame" class="hidden"><div id="pinfo"></div>
+<div id="pbuzz" class="hidden"><br><button id="buzz" onclick="buzz()">BUZZER</button><h2 id="pstat">Bereit!</h2><div class="tm" id="ptm"></div></div></div></div>
+
+<div id="editor" class="hidden">
+<div class="panel"><h3>🛠️ Editor</h3>
+<p class="hint">① Namen &amp; Design · ② Spiele unten aufklappen und ausfüllen · ③ ganz unten „Show starten“</p>
+<div class="row">🔵 <input data-k="n1"> 🔴 <input data-k="n2"> 🎵 Intro-Melodie: <input data-k="intro" placeholder="audio/intro.mp3 (leer = Standard)"></div>
+<div class="row"><button class="b x" onclick="exp()">💾 Sichern (Datei)</button><label class="b x">📂 Laden<input type=file accept=".json" hidden onchange="imp(this)"></label></div>
+<p class="hint">Bilder &amp; Audios: Datei ins GitHub-Repo laden und hier den Pfad eintragen (z. B. <code>bilder/a.jpg</code>). Einstellungen werden automatisch im Browser gespeichert – „Sichern“ erstellt zusätzlich eine Backup-Datei.</p></div>
+
+<details class="panel"><summary>🎨 Design</summary><div class="row" id="presets"></div><div class="row">
+Hintergrund 1 <input type="color" data-k="th.c1"> 2 <input type="color" data-k="th.c2"> Winkel <input type="number" data-k="th.ang" style="width:70px">
+Textfarbe <input type="color" data-k="th.txt"> Akzent <input type="color" data-k="th.acc">
+Schrift <select data-k="th.font"><option>Segoe UI</option><option>Impact</option><option>Georgia</option><option>Trebuchet MS</option><option>Verdana</option><option>Courier New</option></select></div>
+<div class="row">Hintergrundbild (optional): <input data-k="th.img" placeholder="bilder/hintergrund.jpg" style="flex:1"></div></details>
+
+<details class="panel"><summary>✍️ Eigene Texte einblenden</summary>
+<div class="row"><select id=tw></select><select id=tp><option>oben</option><option>oben-links</option><option>oben-rechts</option><option>mitte</option><option>unten</option><option>unten-links</option><option>unten-rechts</option></select>
+<input id=ts type=number value=40 style="width:70px">px <input id=tc type=color value="#ffffff"><input id=tt placeholder="Text..." style="flex:1;min-width:150px"><button class="b g" onclick="addText()">➕ Hinzufügen</button></div>
+<p class="hint">Die Liste unten kannst du frei bearbeiten (Format: wo | position | größe | farbe | text, eine Zeile pro Text).</p>
+<textarea data-k="texts"></textarea></details>
+
+<div id="elist"></div>
+<button class="b big" onclick="start()">🔒 Spielfreigabe erteilen & Show starten</button>
+<button class="b x" onclick="resume()">↻ Laufende Show fortsetzen</button></div>
+
+<div id="stage" class="hidden"></div>
+
+<div id="ctl" class="hidden panel">
+<div class="hint" id="share"></div><div id="dyn"></div>
+<h3>🔔 Buzzer</h3><button class="b g" onclick="upd({winner:null,locked:false})">🔓 Freigeben / zurücksetzen</button><button class="b x" onclick="upd({locked:true})">🔒 Sperren</button>
+<h3>⏱ Timer</h3><button class="b g" onclick="tStart()">▶ Start</button><button class="b x" onclick="tStop()">⏸ Stopp</button><button class="b x" onclick="tReset()">↺ Zurück</button>
+<h3>🎵 Ton</h3><button class="b x" onclick="aud('')">⏹ Audio stopp</button><button class="b x" onclick="aud(cfg.intro||'#jingle')">🎵 Intro</button>
+<h3>🏆 Punkte &amp; Spielwechsel</h3>
+<button class="b bl" onclick="award(1)">🔵 gewinnt das Spiel</button><button class="b r" onclick="award(2)">🔴 gewinnt das Spiel</button><br>
+<button class="b g" onclick="go(st.game+1)">▶ Nächstes Spiel starten</button><button class="b x" onclick="upd({inter:!st.inter})">📊 Zwischenstand ein/aus</button><button class="b x" onclick="go(st.game-1)">◀ Vorheriges Spiel</button><br>
+<button class="b x" onclick="sc(1,1)">🔵 +1</button><button class="b x" onclick="sc(1,-1)">🔵 −1</button><button class="b x" onclick="sc(2,1)">🔴 +1</button><button class="b x" onclick="sc(2,-1)">🔴 −1</button></div>
+
+<div id="bar" class="hidden"></div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getDatabase,ref,set,update,onValue,runTransaction}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+// HIER DEINE FIREBASE CONFIG EINFÜGEN:
+const firebaseConfig={apiKey:"DEIN_API_KEY",authDomain:"DEIN_PROJEKT.firebaseapp.com",databaseURL:"https://DEIN_PROJEKT-default-rtdb.europe-west1.firebasedatabase.app",projectId:"DEIN_PROJEKT",appId:"DEINE_APP_ID"};
+const db=getDatabase(initializeApp(firebaseConfig));let showRef,cfgRef,code='';
+const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TY={action:'🏃 AKTIONSSPIEL',music:'🎵 MUSIKSPIEL',pult:'🧠 PULTSPIEL'};
+const def=()=>({n1:'Kandidat 1',n2:'Gegner',intro:'',th:{c1:'#1e3a8a',c2:'#090d16',ang:135,img:'',txt:'#ffffff',acc:'#f59e0b',font:'Segoe UI'},
+texts:'1 | oben | 40 | #ffffff | Willkommen zur Show!',
+games:Array.from({length:15},(_,i)=>({type:'action',title:'Spiel '+(i+1),sec:30,items:Array.from({length:5},()=>({a:'',b:'',c:''}))}))});
+if(firebaseConfig.apiKey.startsWith('DEIN'))document.body.insertAdjacentHTML('afterbegin','<div class=panel style="background:#dc2626;text-align:center">⚠️ Firebase ist noch nicht eingetragen – oben im Skript <code>firebaseConfig</code> ersetzen, sonst funktioniert die Live-Synchronisation nicht.</div>');
+$('code').value=location.hash.slice(1).toUpperCase()||localStorage.getItem('code')||'';
+window.newCode=()=>{$('code').value=Array.from(crypto.getRandomValues(new Uint8Array(8)),n=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[n%32]).join('')};
+let cfg;try{cfg=JSON.parse(localStorage.getItem('cfg'))}catch(e){}cfg=cfg||def();
+const base=()=>({game:1,score1:0,score2:0,winner:null,locked:false,timerEnd:0,timerRemaining:30,round:0,ans:false,w:{},audio:null,inter:false});
+let st=base(),role='',cur=null,lastA=0,prevW=null;
+
+// ---------- Editor ----------
+const nb=g=>g.buzz??g.type!='action';
+const pts=(g,i)=>g.pts>0?g.pts:i+1,tot=()=>cfg.games.reduce((a,g,i)=>a+pts(g,i),0);
+const PRE=[['Blau','#1e3a8a','#090d16','#f59e0b'],['Rot','#7f1d1d','#1c0a0a','#fbbf24'],['Grün','#14532d','#052e16','#fde047'],['Lila','#581c87','#1e1b4b','#f472b6'],['Schwarz/Gold','#111827','#000000','#facc15']];
+window.preset=i=>{['c1','c2','acc'].forEach((k,j)=>sp('th.'+k,PRE[i][j+1]));fill();theme()};
+window.addText=()=>{const t=$('tt').value.trim();if(!t)return;sp('texts',(cfg.texts?cfg.texts+'\n':'')+[$('tw').value,$('tp').value,$('ts').value,$('tc').value,t].join(' | '));$('tt').value='';fill()};
+window.exp=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(cfg,null,1)],{type:'application/json'}));a.download='show.json';a.click()};
+window.imp=inp=>{const f=inp.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{try{cfg=JSON.parse(fr.result);sp('n1',cfg.n1);buildEditor();theme()}catch(e){alert('Datei ungültig')}};fr.readAsText(f)};
+const gp=k=>k.split('.').reduce((o,p)=>o?.[p],cfg);
+const sp=(k,v)=>{const a=k.split('.'),l=a.pop();a.reduce((o,p)=>o[p],cfg)[l]=v;try{localStorage.setItem('cfg',JSON.stringify(cfg))}catch(e){}};
+function buildEditor(o){
+ $('elist').innerHTML=cfg.games.map((g,i)=>{const p=`games.${i}.`;let x='';
+  if(g.type=='music')x=g.items.map((t,j)=>`<div class=slot><input data-k="${p}items.${j}.a" placeholder="Songname ${j+1}"><input data-k="${p}items.${j}.b" placeholder="audio/song${j+1}.mp3"></div>`).join('');
+  if(g.type=='pult')x=g.items.map((t,j)=>`<div class=slot><b style="color:var(--acc)">Runde ${j+1}</b><input data-k="${p}items.${j}.a" placeholder="Frage"><input data-k="${p}items.${j}.b" placeholder="Lösung"><input data-k="${p}items.${j}.c" placeholder="Bild: bilder/frage${j+1}.jpg"></div>`).join('');
+  return`<details class=card ${o===i?'open':''}><summary><b style="color:var(--acc)">Spiel ${i+1}</b> · ${({action:'🏃',music:'🎵',pult:'🧠'})[g.type]} ${esc(g.title)}</summary><div class=row><select data-k="${p}type"><option value=action>🏃 Aktionsspiel</option><option value=music>🎵 Musikspiel</option><option value=pult>🧠 Pultspiel</option></select><input data-k="${p}title" style="flex:1;min-width:200px" placeholder="Spieltitel">⏱<input type=number data-k="${p}sec" style="width:70px">Punkte<input type=number data-k="${p}pts" style="width:60px"><label><input type=checkbox data-k="${p}buzz"> Buzzer nötig</label></div>${x?`<div class=slots>${x}</div>`:''}</details>`}).join('');
+ $('presets').innerHTML=PRE.map((p,i)=>`<button class="b x" onclick="preset(${i})">${p[0]}</button>`).join('');
+ $('tw').innerHTML='<option value=alle>überall</option><option value=zwischenstand>Zwischenstand</option>'+cfg.games.map((_,i)=>`<option value=${i+1}>Spiel ${i+1}</option>`).join('');
+ fill()}
+function fill(){document.querySelectorAll('[data-k]').forEach(e=>{if(e.type=='checkbox')e.checked=gp(e.dataset.k)??(gp(e.dataset.k.replace('buzz','type'))!='action');else e.value=gp(e.dataset.k)??(e.dataset.k.endsWith('.pts')?+e.dataset.k.split('.')[1]+1:'')})}
+document.addEventListener('input',e=>{const k=e.target.dataset?.k;if(!k)return;
+ sp(k,e.target.type=='checkbox'?e.target.checked:e.target.type=='number'?(+e.target.value||0):e.target.value);
+ if(k.endsWith('.type'))buildEditor(+k.split('.')[1]);theme()});
+
+// ---------- Design & Textbefehle ----------
+function theme(){const t=cfg.th;document.documentElement.style.setProperty('--acc',t.acc);
+ document.body.style.background=t.img?`linear-gradient(#0005,#0005),url("${esc(t.img)}") center/cover fixed`:`linear-gradient(${t.ang}deg,${t.c1},${t.c2}) fixed`;
+ document.body.style.color=t.txt;document.body.style.fontFamily=`'${t.font}',sans-serif`}
+function overlays(){return(cfg.texts||'').split('\n').map(l=>l.split('|').map(s=>s.trim())).filter(p=>p.length>=5).map(p=>{
+ const w=p[0].toLowerCase().replace('spiel','').trim();if(w=='zwischenstand'){if(!st.inter)return''}else if(w!='alle'&&(st.inter||+w!=st.game))return'';
+ const pos=['oben','oben-links','oben-rechts','mitte','unten','unten-links','unten-rechts'].includes(p[1].toLowerCase())?p[1].toLowerCase():'mitte';
+ return`<div class="ov p-${pos}" style="font-size:${+p[2]||36}px;color:${esc(p[3])}">${esc(p.slice(4).join('|'))}</div>`}).join('')}
+
+// ---------- Anzeige (TV + Host) ----------
+const strip=()=>`<div class=strip>${cfg.games.map((_,i)=>{const n=i+1,d=n<st.game||(n==st.game&&st.inter);return`<span class="sn ${d?'done':''} ${n==st.game&&!st.inter?'cur':''}">${n}</span>`}).join('')}</div>`;
+const big=()=>`<span class=badge>Zwischenstand nach Spiel ${st.game}</span><div class=bigs><div class="bt b1 ${st.score1>tot()/2?'win':''}"><div class=bn>🔵 ${esc(cfg.n1)}</div><div class=bp>${st.score1}</div></div><div class="bt b2 ${st.score2>tot()/2?'win':''}"><div class=bn>🔴 ${esc(cfg.n2)}</div><div class=bp>${st.score2}</div></div></div>`+strip()+(st.game<15?`<div class=q>Als Nächstes: Spiel ${st.game+1} – ${esc(cfg.games[st.game].title)}</div>`:'<div class=q>🏆 Endstand</div>');
+function render(){
+ theme();const g=cfg.games[st.game-1];if(!g)return;
+ if(role=='tv'||(role=='host'&&!$('ctl').classList.contains('hidden'))){
+ let h=`<span class=badge>Spiel ${st.game} / 15 • ${TY[g.type]} • ${pts(g,st.game-1)} Pkt.</span><div class=title>${esc(g.title)}</div>`;
+ if(g.type=='music')h+=`<div class=q>${st.audio?.src?'🎵 '+esc(st.audio.label||'Song läuft'):'🎵 Musikspiel'}</div>`;
+ if(g.type=='pult'){const r=g.items[st.round]||{};h+=`<div style="font-size:1.3rem;color:var(--acc)">Runde ${st.round+1} / 5</div>`+(r.c?`<img src="${esc(r.c)}">`:'')+(r.a?`<div class=q>${esc(r.a)}</div>`:'')+(st.ans?`<div class=ans>Lösung: ${esc(r.b||'–')}</div>`:'')}
+ const b=st.winner?['#dc2626',`🚨 ${esc(st.winner)} HAT GEBUZZERT!`]:st.locked?['#475569','🔒 Buzzer gesperrt']:['#16a34a','🟢 Buzzer ist scharf!'];
+ h+=(nb(g)?`<div class=ban style="background:${b[0]}">${b[1]}</div>`:'')+`<div class=tm id=tm></div>`;
+ h=(st.inter?big():strip()+h)+overlays();
+ $('stage').innerHTML=h;
+ $('bar').style.display=st.inter?'none':'';
+ const dots=n=>g.type!='pult'?'':`<table class=dots><tr>${[0,1,2,3,4].map(i=>`<td>${st.w?.[st.game+'_'+i]==n?`<span class=dot style="background:${n==1?'#3b82f6':'#ef4444'};box-shadow:0 0 8px ${n==1?'#3b82f6':'#ef4444'}"></span>`:''}</td>`).join('')}</tr></table>`;
+ $('bar').innerHTML=`<div class="team ${st.score1>tot()/2?'win':''}"><div><div style="font-weight:bold">${esc(cfg.n1)}</div>${dots(1)}</div><div class=pts>${st.score1}</div></div>
+ <div class="team t2 ${st.score2>tot()/2?'win':''}"><div><div style="font-weight:bold">${esc(cfg.n2)}</div>${dots(2)}</div><div class=pts>${st.score2}</div></div>`;
+ if(role=='host'){let d='';
+  if(g.type=='music')d=g.items.map((t,j)=>t.b?`<button class="b g" onclick="aud('${esc(t.b).replace(/'/g,"\\'")}','${esc(t.a||'Song '+(j+1)).replace(/'/g,"\\'")}')">▶ ${esc(t.a||'Song '+(j+1))}</button>`:'').join('');
+  if(g.type=='pult')d=[0,1,2,3,4].map(r=>`<button class="b ${r==st.round?'a':'x'}" onclick="upd({round:${r},ans:false})">Runde ${r+1}</button>`).join('')+`<br><button class="b x" onclick="upd({ans:!st.ans})">👁 Lösung</button><button class="b bl" onclick="setW(1)">🔵 ${esc(cfg.n1)}</button><button class="b r" onclick="setW(2)">🔴 ${esc(cfg.n2)}</button><button class="b x" onclick="setW(0)">✖</button>`;
+  $('dyn').innerHTML=d}}
+ if(role=='player'){const my=$('pname').value.trim(),b=$('buzz');
+  $('pinfo').innerHTML=`<span class=badge>Spiel ${st.game}</span><div class=title>${esc(g.title)}</div>`;
+  $('pbuzz').classList.toggle('hidden',!nb(g)||st.inter);
+  b.className=st.winner?(st.winner==my?'win':'locked'):st.locked?'locked':'';
+  $('pstat').textContent=st.winner?(st.winner==my?'DU WARST AM SCHNELLSTEN!':st.winner+' war schneller!'):st.locked?'Gesperrt...':'Bereit!'}}
+
+// ---------- Rollen & Steuerung ----------
+window.pick=r=>{code=$('code').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');if(code.length<5)return alert('Bitte einen Show-Code mit mindestens 5 Zeichen eingeben – am besten mit „🎲 Neu erzeugen“.');localStorage.setItem('code',code);connect();role=r;$('role').classList.add('hidden');theme();
+ if(r=='player'){$('player').classList.remove('hidden');$('h1').classList.add('hidden')}
+ if(r=='host'){$('editor').classList.remove('hidden');buildEditor()}
+ if(r=='tv'){$('stage').classList.remove('hidden');$('bar').classList.remove('hidden');render()}}
+const live=()=>{$('share').innerHTML='🔗 Link für TV &amp; Kandidaten (Code ist schon enthalten):<br><b>'+esc(location.href.split('#')[0]+'#'+code)+'</b>';$('editor').remove();['stage','bar','ctl'].forEach(i=>$(i).classList.remove('hidden'));render()};
+window.upd=o=>update(showRef,o);
+window.start=()=>{if(!confirm('Spielfreigabe erteilen? Der Editor wird gesperrt und die Show startet neu (Punkte = 0).'))return;
+ live();set(cfgRef,cfg);set(showRef,{...base(),timerRemaining:cfg.games[0].sec,audio:{src:cfg.intro||'#jingle',t:Date.now()}})};
+window.resume=()=>{set(cfgRef,cfg);live()};
+window.go=(n,x={})=>{n=Math.max(1,Math.min(15,n));update(showRef,{inter:false,game:n,round:0,ans:false,winner:null,locked:false,timerEnd:0,timerRemaining:cfg.games[n-1].sec,audio:{src:cfg.intro||'#jingle',t:Date.now()},...x})};
+window.award=t=>{const k='score'+t;upd({[k]:st[k]+pts(cfg.games[st.game-1],st.game-1),inter:true,winner:null,locked:true,timerEnd:0})};
+window.sc=(t,d)=>upd({['score'+t]:Math.max(0,st['score'+t]+d)});
+window.setW=t=>upd({['w/'+st.game+'_'+st.round]:t});
+window.aud=(src,label)=>upd({audio:{src,label:label||'',t:Date.now()}});
+window.join=()=>{if(!$('pname').value.trim())return alert('Bitte Namen eingeben!');$('pjoin').classList.add('hidden');$('pgame').classList.remove('hidden');render()};
+window.buzz=()=>{const n=$('pname').value.trim();if(!n)return alert('Bitte zuerst deinen Namen eingeben!');if(st.locked)return;runTransaction(ref(db,'shows/'+code+'/show/winner'),c=>c?undefined:n)};
+window.tStart=()=>upd({timerEnd:Date.now()+(st.timerRemaining>0?st.timerRemaining:cfg.games[st.game-1].sec)*1000});
+window.tStop=()=>upd({timerEnd:0,timerRemaining:Math.max(0,Math.ceil((st.timerEnd-Date.now())/1000))});
+window.tReset=()=>upd({timerEnd:0,timerRemaining:cfg.games[st.game-1].sec});
+
+// ---------- Ton ----------
+function tone(f,d,type,v){const c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.01,c.currentTime+d);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}
+const buzzSnd=()=>tone(120,.6,'sawtooth',.5);
+function playA(a){if(cur){cur.pause();cur=null}if(!a.src)return;
+ if(a.src=='#jingle'){[261,329,392,523].forEach((f,i)=>setTimeout(()=>tone(f,.4,'triangle',.3),i*130));return}
+ cur=new Audio(a.src);cur.play().catch(()=>{})}
+
+setInterval(()=>{let s=st.timerRemaining;
+ if(st.timerEnd>0){s=Math.max(0,Math.ceil((st.timerEnd-Date.now())/1000));
+  if(!s){if(role=='host')upd({timerEnd:0,timerRemaining:0});if(role=='tv')buzzSnd()}}
+ const t=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+ if($('tm'))$('tm').textContent=t;if($('ptm'))$('ptm').textContent=st.timerEnd>0?'⏱️ '+t:''},250);
+
+function connect(){showRef=ref(db,'shows/'+code+'/show');cfgRef=ref(db,'shows/'+code+'/config');
+onValue(showRef,s=>{if(!s.exists())return;st=Object.assign(base(),s.val());
+ if(st.winner&&!prevW&&(role=='tv'||role=='host'))buzzSnd();prevW=st.winner;
+ if(role=='tv'&&st.audio&&st.audio.t!=lastA){lastA=st.audio.t;playA(st.audio)}
+ render()});
+onValue(cfgRef,s=>{if(s.exists()&&role!='host'){cfg=s.val();render()}})}
+</script></body></html>
