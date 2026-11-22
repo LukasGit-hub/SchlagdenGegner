@@ -242,6 +242,7 @@ function playA(a){if(cur){cur.pause();cur=null}if(!a.src)return;
  if(a.src=='#jingle'){[261,329,392,523].forEach((f,i)=>setTimeout(()=>tone(f,.4,'triangle',.3),i*130));setTimeout(()=>halfA(a),1250);setTimeout(()=>endA(a),2500);return}
  const au=cur=new Audio(a.src);au.onended=au.onerror=()=>endA(a);au.ontimeupdate=()=>{if(isFinite(au.duration)&&au.currentTime>=au.duration/2)halfA(a)};au.play().catch(()=>{setTimeout(()=>halfA(a),1500);setTimeout(()=>endA(a),3000)})}
 
+ 
 setInterval(()=>{let s=st.timerRemaining;
  if(st.timerEnd>0){s=Math.max(0,Math.ceil((st.timerEnd-Date.now())/1000));
   if(!s){if(role=='host')upd({timerEnd:0,timerRemaining:0});if(role=='tv')buzzSnd()}}
