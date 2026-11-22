@@ -97,8 +97,8 @@ Schrift <select data-k="th.font"><option>Segoe UI</option><option>Impact</option
 
 <div id="ctl" class="hidden panel">
 <div class="hint" id="share"></div><div id="tibox" class="hidden"><button class="b a big" onclick="upd({ti:false})">⏭ Ankündigung überspringen</button></div><div id="cvbox" class="hidden"><button class="b g big" onclick="go(1)">▶ Show beginnen – Spiel 1 starten</button></div><div id="dyn"></div>
-<h3>🔔 Buzzer</h3><button class="b g" onclick="upd({winner:null,locked:false})">🔓 Freigeben / zurücksetzen</button><button class="b x" onclick="upd({locked:true})">🔒 Sperren</button>
-<h3>⏱ Timer</h3><button class="b g" onclick="tStart()">▶ Start</button><button class="b x" onclick="tStop()">⏸ Stopp</button><button class="b x" onclick="tReset()">↺ Zurück</button>
+<h3>🔔 Buzzer</h3><button class="b g" onclick="upd({winner:null,locked:false})">🔓 Freigeben / zurücksetzen</button><button class="b x" onclick="upd({locked:true})">🔒 Sperren</button><button class="b x" onclick="upd({hb:!st.hb})">🖼 Bild bei Buzzer ausblenden: <span id="hbS"></span></button>
+<h3>⏱ Timer</h3><button class="b g" onclick="tStart()">▶ Start</button><button class="b x" onclick="tStop()">⏸ Stopp</button><button class="b x" onclick="tReset()">↺ Zurück</button><button class="b x" onclick="upd({tm:!st.tm})">👁 Timer anzeigen: <span id="tmS"></span></button>
 <h3>🎵 Ton</h3><button class="b x" onclick="aud('')">⏹ Audio stopp</button><button class="b x" onclick="aud(cfg.intro||'#jingle')">🎵 Intro</button>
 <h3>🏆 Punkte &amp; Spielwechsel</h3>
 <button class="b bl" onclick="award(1)">🔵 gewinnt das Spiel</button><button class="b r" onclick="award(2)">🔴 gewinnt das Spiel</button><br>
@@ -124,7 +124,7 @@ window.newCode=()=>{$('code').value=Array.from(crypto.getRandomValues(new Uint8A
 let cfg;try{cfg=JSON.parse(localStorage.getItem('cfg'))}catch(e){}cfg=cfg||def();
 const newItem=()=>({a:'',b:'',c:'',k:0,o:['','','','']});
 const fix=()=>cfg.games.forEach(g=>{g.items=(g.items||[]).map(it=>({a:'',b:'',c:'',k:0,...it,o:[...(it.o||[]),'','','',''].slice(0,4)}))});fix();
-const base=()=>({game:1,score1:0,score2:0,winner:null,locked:false,timerEnd:0,timerRemaining:30,round:0,ans:false,w:{},audio:null,inter:false,pa:{},cv:false,ti:false,qv:true,tt:false});
+const base=()=>({game:1,score1:0,score2:0,winner:null,locked:false,timerEnd:0,timerRemaining:30,round:0,ans:false,w:{},audio:null,inter:false,pa:{},cv:false,ti:false,qv:true,tt:false,tm:true,hb:false});
 let st=base(),role='',cur=null,lastA=0,prevW=null;
 
 // ---------- Editor ----------
@@ -186,18 +186,18 @@ function render(){
  if(role=='tv'||(role=='host'&&!$('ctl').classList.contains('hidden'))){
  let h=`<span class=badge>Spiel ${st.game} / 15 • ${cfg.sym===false?TY[g.type].replace(/^\S+ /,''):TY[g.type]} • ${pts(g,st.game-1)} Pkt.</span><div class=title>${esc(g.title)}</div>`;
  if(g.type=='music')h+=`<div class=q>${st.audio?.src?E('🎵')+esc(st.audio.label||'Song läuft'):E('🎵')+'Musikspiel'}</div>`;
- if(g.type=='pult'&&gi()&&!st.qv)h+=`<div class=q>Gleich geht's los …</div>`;else if(g.type=='pult'){const r=g.items[st.round]||{},am=g.mode=='answer';h+=`<div style="font-size:1.3rem;color:var(--acc)">Runde ${st.round+1} / ${g.items.length}</div>`+(r.c?`<img src="${esc(r.c)}">`:'')+(r.a?`<div class=q>${esc(r.a)}</div>`:'');
+ if(g.type=='pult'&&gi()&&!st.qv)h+=`<div class=q>Gleich geht's los …</div>`;else if(g.type=='pult'){const r=g.items[st.round]||{},am=g.mode=='answer';h+=`<div style="font-size:1.3rem;color:var(--acc)">Runde ${st.round+1} / ${g.items.length}</div>`+(r.c&&!(st.hb&&st.winner)?`<img src="${esc(r.c)}">`:'')+(r.a?`<div class=q>${esc(r.a)}</div>`:'');
   if(am)h+='<div class=opts>'+(r.o||[]).map((t,n)=>t?`<div class="opt ${st.ans?(n==+r.k?'ok':'no'):''}"><b>${'ABCD'[n]}</b> ${esc(t)}${st.ans?` ${ta(1)==n?'🔵':''}${ta(2)==n?'🔴':''}`:''}</div>`:'').join('')+'</div>'+(st.ans?'':`<div class=q>🔵 ${ta(1)>=0?'✔':'…'} &nbsp; 🔴 ${ta(2)>=0?'✔':'…'}</div>`);
   else if(st.ans)h+=`<div class=ans>Lösung: ${esc(r.b||'–')}</div>`}
  const b=st.winner?['#dc2626',`🚨 ${esc(st.winner)} HAT GEBUZZERT!`]:st.locked?['#475569','🔒 Buzzer gesperrt']:['#16a34a','🟢 Buzzer ist scharf!'];
- h+=(nb(g)?`<div class=ban style="background:${b[0]}">${b[1]}</div>`:'')+`<div class=tm id=tm></div>`;
+ h+=(nb(g)?`<div class=ban style="background:${b[0]}">${b[1]}</div>`:'')+(st.tm?`<div class=tm id=tm></div>`:'');
  h=(st.cv&&hc()?cover():st.inter?big():st.ti&&gi()?gameSvg(g):strip()+h)+overlays();
  $('stage').innerHTML=h;
  $('bar').style.display=st.inter||(st.cv&&hc())||(st.ti&&gi())?'none':'';
  const dots=n=>g.type!='pult'?'':`<table class=dots><tr>${g.items.map((_,i)=>`<td>${[n,3].includes(st.w?.[st.game+'_'+i])?`<span class=dot style="background:${n==1?'#3b82f6':'#ef4444'};box-shadow:0 0 8px ${n==1?'#3b82f6':'#ef4444'}"></span>`:''}</td>`).join('')}</tr></table>`;
  $('bar').innerHTML=`<div class="team ${st.score1>tot()/2?'win':''}"><div><div style="font-weight:bold">${esc(cfg.n1)}</div>${dots(1)}</div><div class=pts>${st.score1}</div></div>
  <div class="team t2 ${st.score2>tot()/2?'win':''}"><div><div style="font-weight:bold">${esc(cfg.n2)}</div>${dots(2)}</div><div class=pts>${st.score2}</div></div>`;
- if(role=='host'){$('cvbox').classList.toggle('hidden',!(st.cv&&hc()));$('tibox').classList.toggle('hidden',!(st.ti&&gi()));let d='';
+ if(role=='host'){$('tmS').textContent=st.tm?'AN':'AUS';$('hbS').textContent=st.hb?'AN':'AUS';$('cvbox').classList.toggle('hidden',!(st.cv&&hc()));$('tibox').classList.toggle('hidden',!(st.ti&&gi()));let d='';
   if(g.type=='music')d=g.items.map((t,j)=>t.b?`<button class="b g" onclick="aud('${esc(t.b).replace(/'/g,"\\'")}','${esc(t.a||'Song '+(j+1)).replace(/'/g,"\\'")}')">▶ ${esc(t.a||'Song '+(j+1))}</button>`:'').join('');
   if(g.type=='pult')d=gi()&&!st.qv?'<button class="b g big" onclick="upd({qv:true})">▶ Erste Frage anzeigen</button>':g.items.map((_,r)=>`<button class="b ${r==st.round?'a':'x'}" onclick="upd({round:${r},ans:false})">Runde ${r+1}</button>`).join('')+`<br><button class="b x" onclick="reveal()">👁 ${g.mode=='answer'?'Auflösen &amp; auswerten':'Lösung ein/aus'}</button><button class="b bl" onclick="setW(1)">🔵 ${esc(cfg.n1)}</button><button class="b r" onclick="setW(2)">🔴 ${esc(cfg.n2)}</button><button class="b x" onclick="setW(0)">✖</button>`;
   $('dyn').innerHTML=d}}
@@ -242,12 +242,11 @@ function playA(a){if(cur){cur.pause();cur=null}if(!a.src)return;
  if(a.src=='#jingle'){[261,329,392,523].forEach((f,i)=>setTimeout(()=>tone(f,.4,'triangle',.3),i*130));setTimeout(()=>halfA(a),1250);setTimeout(()=>endA(a),2500);return}
  const au=cur=new Audio(a.src);au.onended=au.onerror=()=>endA(a);au.ontimeupdate=()=>{if(isFinite(au.duration)&&au.currentTime>=au.duration/2)halfA(a)};au.play().catch(()=>{setTimeout(()=>halfA(a),1500);setTimeout(()=>endA(a),3000)})}
 
- 
 setInterval(()=>{let s=st.timerRemaining;
  if(st.timerEnd>0){s=Math.max(0,Math.ceil((st.timerEnd-Date.now())/1000));
   if(!s){if(role=='host')upd({timerEnd:0,timerRemaining:0});if(role=='tv')buzzSnd()}}
  const t=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
- if($('tm'))$('tm').textContent=t;if($('ptm'))$('ptm').textContent=st.timerEnd>0?'⏱️ '+t:''},250);
+ if($('tm'))$('tm').textContent=t;if($('ptm'))$('ptm').textContent=st.timerEnd>0&&st.tm?'⏱️ '+t:''},250);
 
 function connect(){showRef=ref(db,'shows/'+code+'/show');cfgRef=ref(db,'shows/'+code+'/config');
 onValue(showRef,s=>{if(!s.exists())return;st=Object.assign(base(),s.val());
