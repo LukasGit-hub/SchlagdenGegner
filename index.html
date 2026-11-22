@@ -1,5 +1,10 @@
+
 <!DOCTYPE html>
-<html lang="de"><head><meta charset="UTF-8"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Schlag den Gegner – Studio-System</title>
 <style>
 *{box-sizing:border-box}
@@ -54,62 +59,119 @@ body.raab{background:linear-gradient(100deg,transparent 0 62%,#f59e0b33 62% 64%,
 #hw{max-width:1100px;margin:0 auto}#hw.hl{max-width:none;display:grid;grid-template-columns:1.2fr 1fr;gap:12px;align-items:start}#hw.hl>*{max-width:none!important;margin:0!important}
 body.hostlive{overflow:hidden;height:100vh;padding:8px}body.hostlive #stage{padding:12px}
 #ctl .b{padding:6px 10px;margin:2px;font-size:.85rem}#ctl .big{padding:10px 16px;font-size:1rem}#ctl h3{display:inline-block;margin:6px 8px 2px 0;font-size:.95rem}
-</style></head><body>
+</style>
+</head>
+<body>
 <h1 id="h1">Schlag den Gegner</h1>
 
-<div id="role" style="margin-top:20px"><div id="logo"></div><p style="font-size:1.1rem">🔑 Show-Code (gleicher Code für alle Geräte)</p>
-<input id="code" placeholder="z. B. K7M2QX9P" maxlength="20" autocomplete="off" style="font-size:1.4rem;text-align:center;text-transform:uppercase;width:260px"><button class="b x" onclick="newCode()">🎲 Neu erzeugen</button>
+<div id="role" style="margin-top:20px">
+<div id="logo"></div>
+<p style="font-size:1.1rem">🔑 Show-Code (gleicher Code für alle Geräte)</p>
+<input id="code" placeholder="z. B. K7M2QX9P" maxlength="20" autocomplete="off" style="font-size:1.4rem;text-align:center;text-transform:uppercase;width:260px">
+<button class="b x" onclick="newCode()">🎲 Neu erzeugen</button>
 <p style="font-size:1.2rem;margin-top:25px">Wer bist du?</p>
 <button class="b big" onclick="pick('player')">📱 Kandidat<br><small>Buzzer auf dem Handy</small></button>
 <button class="b big" onclick="pick('host')">🎛️ Moderator<br><small>Editor &amp; Steuerung</small></button>
-<button class="b big g" onclick="pick('tv')">📺 TV-Ansicht<br><small>Großer Bildschirm</small></button></div>
+<button class="b big g" onclick="pick('tv')">📺 TV-Ansicht<br><small>Großer Bildschirm</small></button>
+</div>
 
 <div id="player" class="hidden">
-<div id="pjoin"><input id="pname" placeholder="Dein Name (optional)" maxlength="15" style="font-size:1.4rem;text-align:center"><p>Wähle dein Team:</p><button id="jt1" class="b big bl" onclick="join(1)">🔵</button><button id="jt2" class="b big r" onclick="join(2)">🔴</button></div>
-<div id="pgame" class="hidden"><div id="pinfo"></div>
-<div id="pans"></div><div id="pbuzz" class="hidden"><br><button id="buzz" onclick="buzz()">BUZZER</button><h2 id="pstat">Bereit!</h2><div class="tm" id="ptm"></div></div></div></div>
+<div id="pjoin">
+<input id="pname" placeholder="Dein Name (optional)" maxlength="15" style="font-size:1.4rem;text-align:center">
+<p>Wähle dein Team:</p>
+<button id="jt1" class="b big bl" onclick="join(1)">🔵</button>
+<button id="jt2" class="b big r" onclick="join(2)">🔴</button>
+</div>
+<div id="pgame" class="hidden">
+<div id="pinfo"></div>
+<div id="pans"></div>
+<div id="pbuzz" class="hidden">
+<br><button id="buzz" onclick="buzz()">BUZZER</button>
+<h2 id="pstat">Bereit!</h2>
+<div class="tm" id="ptm"></div>
+</div>
+</div>
+</div>
 
 <div id="editor" class="hidden">
-<div class="panel"><h3>🛠️ Editor</h3>
+<div class="panel">
+<h3>🛠️ Editor</h3>
 <p class="hint">① Namen &amp; Design · ② Spiele unten aufklappen und ausfüllen · ③ ganz unten „Show starten“</p>
 <div class="row">🔵 <input data-k="n1"> 🔴 <input data-k="n2"> 🎵 Übergangsmusik (für alle Spiele): <input data-k="intro" placeholder="audio/intro.mp3 (leer = Standard)"></div>
 <div class="row">🖼️ Titelbild (bleibt sichtbar bis Spiel 1 startet): <input data-k="cover" placeholder="bilder/titel.jpg" style="flex:1;min-width:200px"></div>
 <div class="row">📛 Show-Name: <input data-k="name" placeholder="z. B. Sommerfest 2026"> Farbe der Rundentabelle: <select data-k="tb"><option value="#facc15">Gelb</option><option value="#22c55e">Grün</option><option value="#f97316">Orange</option><option value="#94a3b8">Grau</option></select></div>
-<div class="row"><label><input type=checkbox data-k="sym"> Symbole bei den Spielen anzeigen (an/aus)</label><br><label><input type=checkbox data-k="gi"> Spiel-Ankündigung im gelben Logo-Kasten (nur im Schlag-den-Gegner-Stil): Musik, danach Folie, Frage 1 per Klick</label></div>
+<div class="row">
+<label><input type=checkbox data-k="sym"> Symbole bei den Spielen anzeigen (an/aus)</label>
+<br><label><input type=checkbox data-k="gi"> Spiel-Ankündigung im gelben Logo-Kasten (nur im Schlag-den-Gegner-Stil): Musik, danach Folie, Frage 1 per Klick</label>
+</div>
 <div class="row"><b>Speichern:</b><button class="b g" onclick="saveLib()">💾 Im Browser speichern</button><select id="lib"></select><button class="b x" onclick="loadLib()">📂 Laden</button><button class="b r" onclick="delLib()">🗑</button></div>
 <div class="row"><button class="b x" onclick="exp()">⬇ Als Datei herunterladen</button><label class="b x">⬆ Datei laden<input type=file accept=".json" hidden onchange="imp(this)"></label></div>
-<p class="hint">Bilder &amp; Audios: Datei ins GitHub-Repo laden und hier den Pfad eintragen (z. B. <code>bilder/a.jpg</code>). Einstellungen werden automatisch im Browser gespeichert – Ganze Shows sicherst du mit „Im Browser speichern“ oder als Datei (Bilder/Audios sind nur Pfade, das braucht kaum Speicher). Am Spieltag einfach laden und starten.</p></div>
+<p class="hint">Bilder &amp; Audios: Datei ins GitHub-Repo laden und hier den Pfad eintragen (z. B. <code>bilder/a.jpg</code>). Einstellungen werden automatisch im Browser gespeichert – Ganze Shows sicherst du mit „Im Browser speichern“ oder als Datei (Bilder/Audios sind nur Pfade, das braucht kaum Speicher). Am Spieltag einfach laden und starten.</p>
+</div>
 
-<details class="panel"><summary>🎨 Design</summary><div class="row"><b>Vorlage:</b><select data-k="style"><option value="">Standard (eigene Farben)</option><option value="raab">🏆 Schlag-den-Gegner-Stil (silber, Streifen, Logo)</option></select> Logo-Text: <input data-k="lt" placeholder="GEGNER" style="width:140px"></div>
-<p class="hint">„Standard“: es gelten alle Einstellungen darunter. Die Stil-Vorlage überschreibt Farben &amp; Hintergrund und zeigt das Logo auf der Startseite.</p><div class="row" id="presets"></div><div class="row">
+<details class="panel">
+<summary>🎨 Design</summary>
+<div class="row"><b>Vorlage:</b><select data-k="style"><option value="">Standard (eigene Farben)</option><option value="raab">🏆 Schlag-den-Gegner-Stil (silber, Streifen, Logo)</option></select> Logo-Text: <input data-k="lt" placeholder="GEGNER" style="width:140px"></div>
+<p class="hint">„Standard“: es gelten alle Einstellungen darunter. Die Stil-Vorlage überschreibt Farben &amp; Hintergrund und zeigt das Logo auf der Startseite.</p>
+<div class="row" id="presets"></div>
+<div class="row">
 Hintergrund 1 <input type="color" data-k="th.c1"> 2 <input type="color" data-k="th.c2"> Winkel <input type="number" data-k="th.ang" style="width:70px">
 Textfarbe <input type="color" data-k="th.txt"> Akzent <input type="color" data-k="th.acc">
-Schrift <select data-k="th.font"><option>Segoe UI</option><option>Impact</option><option>Georgia</option><option>Trebuchet MS</option><option>Verdana</option><option>Courier New</option></select></div>
-<div class="row">Hintergrundbild (optional): <input data-k="th.img" placeholder="bilder/hintergrund.jpg" style="flex:1"></div></details>
+Schrift <select data-k="th.font"><option>Segoe UI</option><option>Impact</option><option>Georgia</option><option>Trebuchet MS</option><option>Verdana</option><option>Courier New</option></select>
+</div>
+<div class="row">Hintergrundbild (optional): <input data-k="th.img" placeholder="bilder/hintergrund.jpg" style="flex:1"></div>
+</details>
 
-<details class="panel"><summary>✍️ Eigene Texte einblenden</summary>
-<div class="row"><select id=tw></select><select id=tp><option>oben</option><option>oben-links</option><option>oben-rechts</option><option>mitte</option><option>unten</option><option>unten-links</option><option>unten-rechts</option></select>
-<input id=ts type=number value=40 style="width:70px">px <input id=tc type=color value="#ffffff"><input id=tt placeholder="Text..." style="flex:1;min-width:150px"><button class="b g" onclick="addText()">➕ Hinzufügen</button></div>
+<details class="panel">
+<summary>✍️ Eigene Texte einblenden</summary>
+<div class="row">
+<select id=tw></select>
+<select id=tp><option>oben</option><option>oben-links</option><option>oben-rechts</option><option>mitte</option><option>unten</option><option>unten-links</option><option>unten-rechts</option></select>
+<input id=ts type=number value=40 style="width:70px">px
+<input id=tc type=color value="#ffffff">
+<input id=tt placeholder="Text..." style="flex:1;min-width:150px">
+<button class="b g" onclick="addText()">➕ Hinzufügen</button>
+</div>
 <p class="hint">Die Liste unten kannst du frei bearbeiten (Format: wo | position | größe | farbe | text, eine Zeile pro Text).</p>
-<textarea data-k="texts"></textarea></details>
+<textarea data-k="texts"></textarea>
+</details>
 
 <div id="elist"></div>
 <button class="b big" onclick="start()">🔒 Spielfreigabe erteilen & Show starten</button>
-<button class="b x" onclick="resume()">↻ Laufende Show fortsetzen</button></div>
+<button class="b x" onclick="resume()">↻ Laufende Show fortsetzen</button>
+</div>
 
 <div id="hw">
 <div id="stage" class="hidden"></div>
 
 <div id="ctl" class="hidden panel">
-<div class="hint" id="share"></div><div><button class="b r" onclick="stopShow()">⛔ Show abbrechen</button><button id="resBtn" class="b x hidden" onclick="upd({end:false})">↩ Show fortsetzen</button></div><div id="tibox" class="hidden"><button class="b a big" onclick="upd({ti:false})">⏭ Ankündigung überspringen</button></div><div id="cvbox" class="hidden"><button class="b g big" onclick="go(1)">▶ Show beginnen – Spiel 1 starten</button></div><div id="dyn"></div>
-<h3>🔔 Buzzer</h3><button class="b g" onclick="upd({winner:null,locked:false})">🔓 Freigeben / zurücksetzen</button><button class="b x" onclick="upd({locked:true})">🔒 Sperren</button><button class="b x" onclick="upd({hb:!st.hb})">🖼 Bild bei Buzzer ausblenden: <span id="hbS"></span></button>
-<h3>⏱ Timer</h3><button class="b g" onclick="tStart()">▶ Start</button><button class="b x" onclick="tStop()">⏸ Stopp</button><button class="b x" onclick="tReset()">↺ Zurück</button><button class="b x" onclick="upd({tm:!st.tm})">👁 Timer anzeigen: <span id="tmS"></span></button>
-<h3>🎵 Ton</h3><button class="b x" onclick="aud('')">⏹ Audio stopp</button><button class="b x" onclick="aud(cfg.intro||'#jingle')">🎵 Intro</button>
+<div class="hint" id="share"></div>
+<div>
+<button class="b r" onclick="stopShow()">⛔ Show abbrechen</button>
+<button id="resBtn" class="b x hidden" onclick="upd({end:false})">↩ Show fortsetzen</button>
+</div>
+<div id="tibox" class="hidden">
+<button class="b a big" onclick="upd({ti:false})">⏭ Ankündigung überspringen</button>
+</div>
+<div id="cvbox" class="hidden">
+<button class="b g big" onclick="go(1)">▶ Show beginnen – Spiel 1 starten</button>
+</div>
+<div id="dyn"></div>
+<h3>🔔 Buzzer</h3>
+<button class="b g" onclick="upd({winner:null,locked:false})">🔓 Freigeben / zurücksetzen</button>
+<button class="b x" onclick="upd({locked:true})">🔒 Sperren</button>
+<button class="b x" onclick="upd({hb:!st.hb})">🖼 Bild bei Buzzer ausblenden: <span id="hbS"></span></button>
+<h3>⏱ Timer</h3>
+<button class="b g" onclick="tStart()">▶ Start</button>
+<button class="b x" onclick="tStop()">⏸ Stopp</button>
+<button class="b x" onclick="tReset()">↺ Zurück</button>
+<button class="b x" onclick="upd({tm:!st.tm})">👁 Timer anzeigen: <span id="tmS"></span></button>
+<h3>🎵 Ton</h3>
+<button class="b x" onclick="aud('')">⏹ Audio stopp</button>
+<button class="b x" onclick="aud(cfg.intro||'#jingle')">🎵 Intro</button>
 <h3>🏆 Punkte &amp; Spielwechsel</h3>
-<button class="b bl" onclick="award(1)">🔵 gewinnt das Spiel</button><button class="b r" onclick="award(2)">🔴 gewinnt das Spiel</button><br>
-<button class="b g" onclick="go(st.game+1)">▶ Nächstes Spiel starten</button><button class="b x" onclick="upd({inter:!st.inter})">📊 Zwischenstand ein/aus</button><button class="b x" onclick="go(st.game-1)">◀ Vorheriges Spiel</button><br>
-<button class="b x" onclick="sc(1,1)">🔵 +1</button><button class="b x" onclick="sc(1,-1)">🔵 −1</button><button class="b x" onclick="sc(2,1)">🔴 +1</button><button class="b x" onclick="sc(2,-1)">🔴 −1</button></div>
-
+<div id="gameflow"></div>
+</div>
 </div>
 
 <div id="bar" class="hidden"></div>
@@ -117,8 +179,10 @@ Schrift <select data-k="th.font"><option>Segoe UI</option><option>Impact</option
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getDatabase,ref,set,update,onValue,runTransaction}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
 // HIER DEINE FIREBASE CONFIG EINFÜGEN:
 const firebaseConfig={apiKey:"DEIN_API_KEY",authDomain:"DEIN_PROJEKT.firebaseapp.com",databaseURL:"https://DEIN_PROJEKT-default-rtdb.europe-west1.firebasedatabase.app",projectId:"DEIN_PROJEKT",appId:"DEINE_APP_ID"};
+
 const db=getDatabase(initializeApp(firebaseConfig));let showRef,cfgRef,code='',myTeam=0,myName='';
 const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const TY={action:'🏃 AKTIONSSPIEL',music:'🎵 MUSIKSPIEL',pult:'🧠 PULTSPIEL'};
@@ -131,7 +195,7 @@ window.newCode=()=>{$('code').value=Array.from(crypto.getRandomValues(new Uint8A
 let cfg;try{cfg=JSON.parse(localStorage.getItem('cfg'))}catch(e){}cfg=cfg||def();
 const newItem=()=>({a:'',b:'',c:'',k:0,o:['','','','']});
 const fix=()=>cfg.games.forEach(g=>{g.items=(g.items||[]).map(it=>({a:'',b:'',c:'',k:0,...it,o:[...(it.o||[]),'','','',''].slice(0,4)}))});fix();
-const base=()=>({game:1,score1:0,score2:0,winner:null,locked:false,timerEnd:0,timerRemaining:30,round:0,ans:false,w:{},audio:null,inter:false,pa:{},cv:false,ti:false,qv:true,tt:false,tm:true,hb:false,end:false});
+const base=()=>({game:1,score1:0,score2:0,winner:null,locked:false,timerEnd:0,timerRemaining:30,round:0,ans:false,w:{},audio:null,inter:false,pa:{},cv:false,ti:false,qv:true,tt:false,tm:true,hb:false,end:false,awards:{},preview:false});
 let st=base(),role='',cur=null,lastA=0,prevW=null;
 
 // ---------- Editor ----------
@@ -182,14 +246,18 @@ function gameSvg(g){const n=st.game,t=esc(String(g.title||'').toUpperCase()),a='
  return logoSvg(d?`<text x="240" y="150" font-size="96" textLength="${Math.min(290,40*a.length)}" lengthAdjust="spacingAndGlyphs">${a}</text>`:`<text x="240" y="112" font-size="78" textLength="${Math.min(280,36*a.length)}" lengthAdjust="spacingAndGlyphs">${a}</text><text x="240" y="170" font-size="38" textLength="${Math.min(300,20*t.length)}" lengthAdjust="spacingAndGlyphs">${t}</text>`)}
 const hc=()=>!!(cfg.cover||cfg.style=='raab');
 const cover=()=>cfg.cover?`<img src="${esc(cfg.cover)}" style="max-width:100%;max-height:78vh;border-radius:12px">`:logoSvg();
+
+// ---------- Logo mit verkleinertem gelbem Oval ----------
 function logoSvg(T){const t=esc((cfg.lt||'GEGNER').toUpperCase()),D=`<text x="240" y="96" font-size="64" textLength="250" lengthAdjust="spacingAndGlyphs">SCHLAG</text><text x="240" y="126" font-size="26" textLength="50" lengthAdjust="spacingAndGlyphs">DEN</text><text x="240" y="196" font-size="96" textLength="280" lengthAdjust="spacingAndGlyphs">${t}</text>`;let L='',S=[],N=30;
  for(let k=0;k<=N;k++){const a=(100+k*162/N)*Math.PI/180,x=240+205*Math.cos(a),y=120+104*Math.sin(a),f=1-.3*k/N,ph=Math.atan2(104*Math.cos(a),-205*Math.sin(a))*180/Math.PI;S.push(x.toFixed(1)+','+y.toFixed(1));
   [-40,40].forEach((d,i)=>{const ln=38*f,wd=20*f;L+=`<path d="M0,0Q${ln/2},${-wd} ${ln},0Q${ln/2},${wd} 0,0Z" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(ph+d).toFixed(1)})" fill="url(#lg${i?1:3})"/>`})}
  L='<polyline points="'+S.join(' ')+'" fill="none" stroke="#6b7280" stroke-width="2.5"/>'+L;
  const w='stroke="#6b7280" stroke-width=".7"';
- return`<svg viewBox="0 0 480 240" style="width:min(720px,92%);height:auto"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#9ca3af"/><stop offset="1" stop-color="#e5e7eb"/></linearGradient><linearGradient id="lg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e5e7eb"/><stop offset=".5" stop-color="#6b7280"/><stop offset="1" stop-color="#d1d5db"/></linearGradient><radialGradient id="lg2" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#fef08a"/><stop offset=".55" stop-color="#fbbf24"/><stop offset="1" stop-color="#ea580c"/></radialGradient></defs><g ${w}>${L}</g><g ${w} transform="matrix(-1 0 0 1 480 0)">${L}</g><rect x="68" y="30" width="344" height="180" rx="90" fill="url(#lg2)" stroke="#fff" stroke-width="4"/><g font-family="Impact,'Arial Black',sans-serif" text-anchor="middle" fill="#111" stroke="#fff" stroke-width="1.5" paint-order="stroke">${T||D}</g></svg>`}
+ return`<svg viewBox="0 0 480 240" style="width:min(720px,92%);height:auto"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#9ca3af"/><stop offset="1" stop-color="#e5e7eb"/></linearGradient><linearGradient id="lg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e5e7eb"/><stop offset=".5" stop-color="#6b7280"/><stop offset="1" stop-color="#d1d5db"/></linearGradient><radialGradient id="lg2" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#fef08a"/><stop offset=".55" stop-color="#fbbf24"/><stop offset="1" stop-color="#ea580c"/></radialGradient></defs><g ${w}>${L}</g><g ${w} transform="matrix(-1 0 0 1 480 0)">${L}</g><rect x="86" y="39" width="308" height="162" rx="81" fill="url(#lg2)" stroke="#fff" stroke-width="4"/><g font-family="Impact,'Arial Black',sans-serif" text-anchor="middle" fill="#111" stroke="#fff" stroke-width="1.5" paint-order="stroke">${T||D}</g></svg>`}
+
 const strip=()=>`<div class=strip>${cfg.games.map((_,i)=>{const n=i+1,d=n<st.game||(n==st.game&&st.inter);return`<span class="sn ${d?'done':''} ${n==st.game&&!st.inter?'cur':''}">${n}</span>`}).join('')}</div>`;
 const big=()=>`<span class=badge>Zwischenstand nach Spiel ${st.game}</span><div class=bigs><div class="bt b1 ${st.score1>tot()/2?'win':''}"><div class=bn>🔵 ${esc(cfg.n1)}</div>${scoreEl(st.score1,'bp',150)}</div><div class="bt b2 ${st.score2>tot()/2?'win':''}"><div class=bn>🔴 ${esc(cfg.n2)}</div>${scoreEl(st.score2,'bp',150)}</div></div>`+strip()+(st.game<15?`<div class=q>Als Nächstes: Spiel ${st.game+1} – ${esc(cfg.games[st.game].title)}</div>`:'<div class=q>🏆 Endstand</div>');
+const preview=()=>`<span class=badge>Als Nächstes: Spiel ${st.game} / ${cfg.games.length}</span><div class=title>${esc(cfg.games[st.game-1].title)}</div>`+strip()+(gi()?gameSvg(cfg.games[st.game-1]):'');
 const SEGS={0:'abcdef',1:'bc',2:'abdeg',3:'abcdg',4:'bcfg',5:'acdfg',6:'acdefg',7:'abc',8:'abcdefg',9:'abcdfg'},SP={a:'M8,2L46,2L40,9L14,9Z',b:'M48,4L48,44L41,38L41,11Z',c:'M48,52L48,92L41,85L41,58Z',d:'M8,94L46,94L40,87L14,87Z',e:'M6,52L12,58L12,85L6,92Z',f:'M6,4L12,11L12,38L6,44Z',g:'M8,48L14,43L40,43L46,48L40,53L14,53Z'};
 const dig=(n,h)=>String(Math.max(0,n)).padStart(2,' ').split('').map(c=>{if(c==' ')return`<svg viewBox="0 0 54 96" style="height:${h}px"></svg>`;const on=SEGS[c]||'';return`<svg viewBox="0 0 54 96" style="height:${h}px">`+Object.keys(SP).map(k=>`<path d="${SP[k]}" fill="${on.includes(k)?'#fff':'#2b2b2b'}"/>`).join('')+'</svg>'}).join('');
 const scoreEl=(n,c,h)=>cfg.style=='raab'?`<div class=lcd>${dig(n,h)}</div>`:`<div class=${c}>${n}</div>`;
@@ -204,22 +272,29 @@ function render(){
   else if(st.ans)h+=`<div class=ans>Lösung: ${esc(r.b||'–')}</div>`}
  const b=st.winner?['#dc2626',`🚨 ${esc(st.winner)} HAT GEBUZZERT!`]:st.locked?['#475569','🔒 Buzzer gesperrt']:['#16a34a','🟢 Buzzer ist scharf!'];
  h+=(nb(g)?`<div class=ban style="background:${b[0]}">${b[1]}</div>`:'')+(st.tm?`<div class=tm id=tm></div>`:'');
- h=(st.end?endv():st.cv&&hc()?cover():st.inter?big():st.ti&&gi()?gameSvg(g):strip()+h)+overlays();
+ h=(st.end?endv():st.cv&&hc()?cover():st.inter?big():st.preview?preview():st.ti&&gi()?gameSvg(g):strip()+h)+overlays();
  $('stage').innerHTML=h;
- $('bar').style.display=st.end||st.inter||(st.cv&&hc())||(st.ti&&gi())?'none':'';
- const dots=n=>g.type!='pult'?'':`<table class=dots><tr>${g.items.map((_,i)=>`<td>${[n,3].includes(st.w?.[st.game+'_'+i])?`<span class=dot style="background:${n==1?'#3b82f6':'#ef4444'};box-shadow:0 0 8px ${n==1?'#3b82f6':'#ef4444'}"></span>`:''}</td>`).join('')}</tr></table>`;
+ $('bar').style.display=st.end||st.inter||st.preview||(st.cv&&hc())||(st.ti&&gi())?'none':'';
+ const dots=n=>`<table class=dots><tr>${cfg.games.map((_,i)=>`<td title="Spiel ${i+1}">${st.awards?.[i+1]==n?`<span class=dot style="background:${n==1?'#3b82f6':'#ef4444'};box-shadow:0 0 8px ${n==1?'#3b82f6':'#ef4444'}"></span>`:''}</td>`).join('')}</tr></table>`;
  $('bar').innerHTML=`<div class="team ${st.score1>tot()/2?'win':''}"><div><div style="font-weight:bold">${esc(cfg.n1)}</div>${dots(1)}</div>${scoreEl(st.score1,'pts',46)}</div>
  <div class="team t2 ${st.score2>tot()/2?'win':''}"><div><div style="font-weight:bold">${esc(cfg.n2)}</div>${dots(2)}</div>${scoreEl(st.score2,'pts',46)}</div>`;
- if(role=='host'){$('resBtn').classList.toggle('hidden',!st.end);$('tmS').textContent=st.tm?'AN':'AUS';$('hbS').textContent=st.hb?'AN':'AUS';$('cvbox').classList.toggle('hidden',!(st.cv&&hc()));$('tibox').classList.toggle('hidden',!(st.ti&&gi()));let d='';
+ if(role=='host'){$('resBtn').classList.add('hidden');$('tmS').textContent=st.tm?'AN':'AUS';$('hbS').textContent=st.hb?'AN':'AUS';$('cvbox').classList.toggle('hidden',!(st.cv&&hc()));$('tibox').classList.toggle('hidden',!(st.ti&&gi()));let d='';
   if(g.type=='music')d=g.items.map((t,j)=>t.b?`<button class="b g" onclick="aud('${esc(t.b).replace(/'/g,"\\'")}','${esc(t.a||'Song '+(j+1)).replace(/'/g,"\\'")}')">▶ ${esc(t.a||'Song '+(j+1))}</button>`:'').join('');
   if(g.type=='pult')d=gi()&&!st.qv?'<button class="b g big" onclick="upd({qv:true})">▶ Erste Frage anzeigen</button>':g.items.map((_,r)=>`<button class="b ${r==st.round?'a':'x'}" onclick="upd({round:${r},ans:false})">Runde ${r+1}</button>`).join('')+`<br><button class="b x" onclick="reveal()">👁 ${g.mode=='answer'?'Auflösen &amp; auswerten':'Lösung ein/aus'}</button><button class="b bl" onclick="setW(1)">🔵 ${esc(cfg.n1)}</button><button class="b r" onclick="setW(2)">🔴 ${esc(cfg.n2)}</button><button class="b x" onclick="setW(0)">✖</button>`;
-  $('dyn').innerHTML=d;fit()}}
+  $('dyn').innerHTML=st.preview||st.inter||st.end?'':d;
+  const a=st.awards?.[st.game], last=st.game>=cfg.games.length;
+  $('gameflow').innerHTML=st.end||st.cv||(st.ti&&gi())?'':st.inter
+   ?`<button class="b g big" onclick="nextOverview()">${last?'🏁 Endstand anzeigen':'▶ Übersicht nächstes Spiel'}</button>`
+   :st.preview?`<button class="b g big" onclick="go(st.game)">▶ Spiel ${st.game} starten</button>`
+   :a?`<button class="b g big" onclick="showScore()">📊 Neuen Spielstand groß anzeigen</button>`
+   :`<button class="b bl big" onclick="award(1)">🔵 ${esc(cfg.n1)} gewinnt das Spiel</button><button class="b r big" onclick="award(2)">🔴 ${esc(cfg.n2)} gewinnt das Spiel</button>`;
+  fit()}}
  if(role=='player'){const my=$('pname').value.trim(),b=$('buzz');
   $('pinfo').innerHTML=st.end?`<div class=title>🏁 Die Show wurde beendet</div>`:st.cv&&hc()?`<div class=title>🎬 Gleich geht's los!</div>`:`<span class=badge>Spiel ${st.game}</span><div class=title>${esc(g.title)}</div>`;
   $('jt1').textContent='🔵 '+cfg.n1;$('jt2').textContent='🔴 '+cfg.n2;
   const am=g.type=='pult'&&g.mode=='answer',r=g.items[st.round]||{},me=(st.pa?.[st.game+'_'+st.round]||{})[safe(myName)];
-  $('pans').innerHTML=am&&!st.end&&!st.inter&&!(st.cv&&hc())&&!(st.ti&&gi())&&!(gi()&&!st.qv)?(r.a?`<div class=q>${esc(r.a)}</div>`:'')+'<div class=opts style="grid-template-columns:1fr">'+(r.o||[]).map((t,n)=>t?`<button class="opt ${me&&me.i==n?'sel':''} ${st.ans?(n==+r.k?'ok':'no'):''}" ${st.ans?'disabled':''} onclick="pa(${n})"><b>${'ABCD'[n]}</b> ${esc(t)}</button>`:'').join('')+'</div>'+(st.ans&&me?`<h2>${me.i==+r.k?'✅ Richtig!':'❌ Leider falsch'}</h2>`:''):'';
-  $('pbuzz').classList.toggle('hidden',!nb(g)||st.end||st.inter||(st.cv&&hc())||(st.ti&&gi()));
+  $('pans').innerHTML=am&&!st.end&&!st.inter&&!(st.cv&&hc())&&!(st.ti&&gi())&&!(gi()&&!st.qv)?(r.a?`<div class=q>${esc(r.a)}</div>`:'')+'<div class=opts style="grid-template-columns:1fr">'+(r.o||[]).map((t,n)=>t?`<button class="opt ${me&&me.i==n?'sel':''} ${st.ans?(n==+r.k?'ok':'no')}" ${st.ans?'disabled':''} onclick="pa(${n})"><b>${'ABCD'[n]}</b> ${esc(t)}</button>`:'').join('')+'</div>'+(st.ans&&me?`<h2>${me.i==+r.k?'✅ Richtig!':'❌ Leider falsch'}</h2>`:''):'';
+  $('pbuzz').classList.toggle('hidden',!nb(g)||st.end||st.inter||st.preview||(st.cv&&hc())||(st.ti&&gi()));
   b.className=st.winner?(st.winner==my?'win':'locked'):st.locked?'locked':'';
   $('pstat').textContent=st.winner?(st.winner==my?'DU WARST AM SCHNELLSTEN!':st.winner+' war schneller!'):st.locked?'Gesperrt...':'Bereit!'}}
 
@@ -234,15 +309,31 @@ window.pick=r=>{code=$('code').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'
  if(r=='player'){$('player').classList.remove('hidden');$('h1').classList.add('hidden')}
  if(r=='host'){$('editor').classList.remove('hidden');buildEditor()}
  if(r=='tv'){$('stage').classList.remove('hidden');$('bar').classList.remove('hidden');render()}}
-const live=()=>{$('share').innerHTML='🔗 Link für TV &amp; Kandidaten (Code ist schon enthalten):<br><b>'+esc(location.href.split('#')[0]+'#'+code)+'</b>';$('editor').remove();document.body.classList.add('hostlive');$('hw').classList.add('hl');['stage','bar','ctl'].forEach(i=>$(i).classList.remove('hidden'));render()};
+const live=()=>{$('share').innerHTML='🔗 Link für TV &amp; Kandidaten (Code ist schon enthalten):<br><b>'+esc(location.href.split('#')[0]+'#'+code)+'</b>';$('editor').classList.add('hidden');document.body.classList.add('hostlive');$('hw').classList.add('hl');['stage','bar','ctl'].forEach(i=>$(i).classList.remove('hidden'));render()};
 window.upd=o=>update(showRef,o);
-window.stopShow=()=>{if(confirm('Show wirklich abbrechen?\n\nOK = Ja, die Show ist zu Ende.\nAbbrechen = Nein, es geht weiter.'))upd({end:true,locked:true,timerEnd:0,audio:{src:'',t:Date.now()}})};
+window.stopShow=async()=>{if(!confirm('Show wirklich abbrechen?\n\nOK = Ja, zurück zu den Einstellungen.\nAbbrechen = Nein, es geht weiter.'))return;
+ await upd({end:true,locked:true,timerEnd:0,audio:{src:'',t:Date.now()}});
+ if(cur){cur.pause();cur=null}
+ document.body.classList.remove('hostlive');$('hw').classList.remove('hl');$('hw').style.transform='';$('hw').style.width='';
+ ['stage','bar','ctl'].forEach(i=>$(i).classList.add('hidden'));$('editor').classList.remove('hidden');buildEditor();theme();
+};
 window.start=()=>{if(!confirm('Spielfreigabe erteilen? Der Editor wird gesperrt und die Show startet neu (Punkte = 0).'))return;
  live();set(cfgRef,cfg);set(showRef,{...base(),timerRemaining:cfg.games[0].sec,cv:hc(),audio:hc()?null:{src:cfg.intro||'#jingle',t:Date.now()}})};
 window.resume=()=>{set(cfgRef,cfg);live()};
-window.go=(n,x={})=>{n=Math.max(1,Math.min(15,n));update(showRef,{cv:false,ti:gi(),tt:false,qv:!gi(),inter:false,game:n,round:0,ans:false,winner:null,locked:false,timerEnd:0,timerRemaining:cfg.games[n-1].sec,audio:{src:cfg.intro||'#jingle',t:Date.now()},...x})};
-window.award=t=>{const k='score'+t;upd({[k]:st[k]+pts(cfg.games[st.game-1],st.game-1),inter:true,winner:null,locked:true,timerEnd:0})};
-window.sc=(t,d)=>upd({['score'+t]:Math.max(0,st['score'+t]+d)});
+window.go=(n,x={})=>{n=Math.max(1,Math.min(cfg.games.length,n));return update(showRef,{cv:false,ti:gi(),tt:false,qv:!gi(),inter:false,preview:false,game:n,round:0,ans:false,winner:null,locked:false,timerEnd:0,timerRemaining:cfg.games[n-1].sec,audio:{src:cfg.intro||'#jingle',t:Date.now()},...x})};
+window.award=t=>{if(st.end||st.cv||st.ti||st.preview||st.inter||![1,2].includes(t))return;
+ return runTransaction(showRef,current=>{if(!current||current.end||current.cv||current.ti||current.preview||current.inter)return;
+  const n=current.game;if(current.awards?.[n])return;
+  const points=pts(cfg.games[n-1],n-1);current.awards={...(current.awards||{}),[n]:t};
+  current['score'+t]=(current['score'+t]||0)+points;
+  current.locked=true;current.winner=null;current.timerEnd=0;
+  return current;
+ });};
+window.showScore=()=>{if(st.awards?.[st.game])upd({inter:true,preview:false})};
+window.nextOverview=()=>{if(!st.inter)return;
+ if(st.game>=cfg.games.length){upd({end:true,inter:false});return}
+ const n=st.game+1;upd({game:n,inter:false,preview:true,ti:false,cv:false,round:0,ans:false,winner:null,locked:true,timerEnd:0,audio:{src:'',t:Date.now()}});
+};
 window.reveal=()=>{const g=cfg.games[st.game-1],it=g.items[st.round];if(g.mode!='answer')return upd({ans:!st.ans});const c=t=>ta(t)===+it.k;upd({ans:true,['w/'+st.game+'_'+st.round]:(c(1)?1:0)+(c(2)?2:0)})};
 window.pa=n=>{if(st.ans||!myTeam)return;set(ref(db,'shows/'+code+'/show/pa/'+st.game+'_'+st.round+'/'+safe(myName)),{t:myTeam,i:n})};
 window.setW=t=>upd({['w/'+st.game+'_'+st.round]:t});
@@ -275,4 +366,6 @@ onValue(showRef,s=>{if(!s.exists())return;st=Object.assign(base(),s.val());
  render()});
 onValue(cfgRef,s=>{if(s.exists()&&role!='host'){cfg=s.val();fix();render()}})}
 theme();
-</script></body></html>
+</script>
+</body>
+</html>
